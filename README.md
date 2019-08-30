@@ -1,16 +1,24 @@
 
+Standard Spring boot application, running embedded tomcat on port 7755.  
+Uses in memory database and loads the data initially on startup.  The decision was made to do this to lessen the load on the page call, even though with 100 records the difference shouldn't be noticeable.
+
+Source code:  https://github.com/rancour-a/dupe-excercise
+To run (SPRING BOOT/MAVEN):  mvn spring-boot:run  in the project dir, then goto localhost:7755 
+To see a running app:   https://validity-demo-dupe.herokuapp.com/
+
+Create a JAR from source:  mvn install package 
+
+------------
 
 Initial Pull Request - 90 minutes transpired
 	- Researched algorythms, Determined approach, initial loading of file, internal store, skeleton
 	
-	
+Final - 3 hours.
 Next pull request 
 	dupe algorythm into the service, 
 	controller to expose JSON, 
 	simple thymeleaf template to display.
-	comments, deployability
-
-
+	comments
 
 -------------------
 
