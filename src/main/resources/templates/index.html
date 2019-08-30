@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Duplicate Exercise</title>
+</head>
+<body>
+	<div th:each="instance : ${dupeMap}">
+		<h4 th:switch="${instance.key}">
+			<p th:case="'0'">None Duplicates</p>
+			<p th:case="*">Potential Duplicates</p>
+		</h4>
+		<ul th:each="contact : ${instance.value}">
+			<li th:text="${contact}">keyvalue</li>
+		</ul>
+	</div>
+</body>
+</html>

@@ -3,14 +3,19 @@ package com.rancoura.validity.dupeexercise.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.rancoura.validity.dupeexercise.util.MatcherLevenshtein;
 
 @Entity
 public class Contact implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Id
+	@Id @GeneratedValue
 	Long id;	
 	String firstName;
 	String lastName;
@@ -23,10 +28,12 @@ public class Contact implements Serializable {
 	String stateLong;
 	String stateCode;
 	String phone;
+	@JsonProperty(access = Access.WRITE_ONLY)
+	Integer dupeIndex;
 	
 	public Contact(String[] record) {		
 		if (record.length == 12) {
-			this.id = Long.valueOf(record[0]);
+//			this.id = Long.valueOf(record[0]);
 			this.firstName = record[1];
 			this.lastName = record[2];
 			this.company = record[3];
@@ -117,11 +124,20 @@ public class Contact implements Serializable {
 		this.phone = phone;
 	}
 	
+	public Integer getDupeIndex() {
+		return dupeIndex;
+	}
+
+	public void setDupeIndex(Integer dupeIndex) {
+		this.dupeIndex = dupeIndex;
+	}
+
 	@Override
 	public String toString() {
 		return "Contact [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", company=" + company
 				+ ", email=" + email + ", address1=" + address1 + ", address2=" + address2 + ", zip=" + zip + ", city="
-				+ city + ", stateLong=" + stateLong + ", stateCode=" + stateCode + ", phone=" + phone + "]";
+				+ city + ", stateLong=" + stateLong + ", stateCode=" + stateCode + ", phone=" + phone + ", dupeIndex="
+				+ dupeIndex + "]";
 	}
 	
 	public String outLine() {
@@ -219,6 +235,137 @@ public class Contact implements Serializable {
 		} else if (!zip.equals(other.zip))
 			return false;
 		return true;
+	}
+	
+	public boolean pseudoEquals(Object obj) {
+
+		int allowedDiffThreshold = 3, 
+				numOfDiff = 0, 
+				levenshteinThreshold = 3;
+		MatcherLevenshtein matcher = new MatcherLevenshtein(levenshteinThreshold);
+
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+			
+		Contact other = (Contact) obj;
+		
+//		if (email and phone ==, return true no matter what)     // gets by not filled in addresses
+		if (email != null && other.email != null && email.equals(other.email) &&
+				phone != null && other.phone != null && phone.equals(other.phone)) {
+			return true;
+		}
+	
+		if (address1 == null) {
+			if (other.address1 != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(address1, other.address1)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (address2 == null) {
+			if (other.address2 != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false; 
+				}
+		} else if (!matcher.match(address2, other.address2)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (city == null) {
+			if (other.city != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(city, other.city)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (company == null) {
+			if (other.company != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(company, other.company)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (email == null) {
+			if (other.email != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(email, other.email)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (firstName == null) {
+			if (other.firstName != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(firstName, other.firstName)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		//		if (id == null) {
+		//			if (other.id != null)
+		//				if (++numOfDiff > allowedDiffThreshold)
+		//					return false;
+		//		} else if (!id.equals(other.id))
+		//			return false;
+		if (lastName == null) {
+			if (other.lastName != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(lastName, other.lastName)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (phone == null) {
+			if (other.phone != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(phone, other.phone)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (stateCode == null) {
+			if (other.stateCode != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(stateCode, other.stateCode)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (stateLong == null) {
+			if (other.stateLong != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(stateLong, other.stateLong)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+		if (zip == null) {
+			if (other.zip != null) {
+				if (++numOfDiff > allowedDiffThreshold)
+					return false;
+			}
+		} else if (!matcher.match(zip, other.zip)) {
+			if (++numOfDiff > allowedDiffThreshold)
+				return false;
+		}
+
+		return true;	
 	}
 	
 }

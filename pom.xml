@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.rancoura.validity</groupId>
 	<artifactId>dupe-exercise</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>dupe-exercise</name>
 	<description>Demo Exercise in Futility</description>
 
@@ -51,6 +51,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+	
 	</dependencies>
 
 	<build>
@@ -58,6 +59,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                <executable>true</executable>
+            </configuration>
 			</plugin>
 		</plugins>
 	</build>
