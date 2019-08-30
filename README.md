@@ -4,7 +4,7 @@ Uses in memory database and loads the data initially on startup.  The decision w
 
 Source code:  https://github.com/rancour-a/dupe-excercise
 To run (SPRING BOOT/MAVEN):  mvn spring-boot:run  in the project dir, then goto localhost:7755 
-To see a running app:   HEROKU   
+To see a running app:   https://validity-demo-dupe.herokuapp.com/
 
 Create a JAR from source:  mvn install package 
 
